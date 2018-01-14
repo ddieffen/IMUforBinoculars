@@ -16,4 +16,4 @@ Le plugin "Telescope Control" ou "Contôle de telescope" se charge d'envoyer des
 
 ![Projection dans Stellarium](https://github.com/ddieffen/IMUforBinoculars/raw/master/Wiki/Stellarium.png)
 
-[![Projection dans Stellarium](https://img.youtube.com/vi/https://youtu.be/Eth5bdYiN0c/0.jpg)](https://www.youtube.com/watch?v=Eth5bdYiN0c)
+[![Projection dans Stellarium](https://img.youtube.com/vi/Eth5bdYiN0c/0.jpg)](https://www.youtube.com/watch?v=Eth5bdYiN0c)
