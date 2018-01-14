@@ -7,3 +7,11 @@ En utilisant le GPS, nous obtenons la data, heure et position sur terre de l'obs
 Après un calcul de changement de repère, l'ascention droite et la déclinaison sont envoyées au logiciel Stellarium qui montre l'endroit visé dans le ciel.
 
 ![Principe général](https://github.com/ddieffen/IMUforBinoculars/raw/master/Wiki/GeneralPrinciple.png)
+
+Grâce à l'apparition de modules simples à utiliser, le câblage est relativement simple. Il suffit de connecter la centrale inertielle et le microcontrolleur au moyen d'un bus I2C et de connecter le GPS au moyen d'un port série.
+
+![Principe général](https://github.com/ddieffen/IMUforBinoculars/raw/master/Schematics/StarPointer_bb.png)
+
+Le plugin "Telescope Control" ou "Contôle de telescope" se charge d'envoyer des requêtes au microcontrolleur qui lui, répond en envoyant les coordonées visées actuellement.
+
+![Principe général](https://github.com/ddieffen/IMUforBinoculars/commits/master/Wiki/Stellarium.png)
