@@ -10,7 +10,7 @@ Après un calcul de changement de repère, l'ascention droite et la déclinaison
 
 Grâce à l'apparition de modules simples à utiliser, le câblage est relativement simple. Il suffit de connecter la centrale inertielle et le microcontrolleur au moyen d'un bus I2C et de connecter le GPS au moyen d'un port série.
 
-![Principe général](https://github.com/ddieffen/IMUforBinoculars/raw/master/Schematics/StarPointer_bb.png)
+![Principe général](https://github.com/ddieffen/IMUforBinoculars/raw/master/Schematics/StarPointer_bb.png =150x)
 
 Le plugin "Telescope Control" ou "Contôle de telescope" se charge d'envoyer des requêtes au microcontrolleur qui lui, répond en envoyant les coordonées visées actuellement.
 
