@@ -15,3 +15,5 @@ Grâce à l'apparition de modules simples à utiliser, le câblage est relativem
 Le plugin "Telescope Control" ou "Contôle de telescope" se charge d'envoyer des requêtes au microcontrolleur qui lui, répond en envoyant les coordonées visées actuellement.
 
 ![Projection dans Stellarium](https://github.com/ddieffen/IMUforBinoculars/raw/master/Wiki/Stellarium.png)
+
+[![Projection dans Stellarium](https://img.youtube.com/vi/https://youtu.be/Eth5bdYiN0c/0.jpg)](https://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HEREhttps://youtu.be/Eth5bdYiN0c)
