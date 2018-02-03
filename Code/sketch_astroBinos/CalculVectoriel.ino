@@ -43,30 +43,6 @@ void CalculVectoriel::Trace() {
   Serial.print(Azimut());
   Serial.print(" ; Altitude ; ");
   Serial.println(Altitude());
-  Serial.print (" phii, phij ; ");
-  Serial.print (phii, 6);
-  Serial.print (" ; ");
-  Serial.print (phij, 6);
-  Serial.print (" ; ");
-  Serial.print (" ri, rj, rk, phi ; ");
-  Serial.print (ri, 6);
-  Serial.print (" ; ");
-  Serial.print (rj, 6);
-  Serial.print (" ; ");
-  Serial.print (rk, 6);
-  Serial.print (" ; ");
-  Serial.print (phi, 6);
-  Serial.print ("; mi, mj, mk : ");
-  Serial.print (mi, 6);
-  Serial.print (" ; ");
-  Serial.print (mj, 6);
-  Serial.print (" ; ");
-  Serial.print (mk, 6);
-  Serial.print ("; phix, phim ; ");
-  Serial.print (thetax, 6);
-  Serial.print (" ; ");
-  Serial.print (thetam, 6);
-
 }
 
 
