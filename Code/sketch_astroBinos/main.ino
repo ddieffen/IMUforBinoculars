@@ -23,14 +23,16 @@ void setup() {
   astro.Setup();
 
   delay(1000);
-  Serial.print("Read ");
+  Serial.print("Read from GPS");
 
   // Recherche signal GPS
+  int timeout = 1000;
   do {
     localize = gps.Read();
     //Serial.print("Read ");
-
-  }  while (localize == false);
+    timeout--;
+  }  while (localize == false && timeout > 0);
+  
   lat = gps.Latitude();
   lon = gps.Longitude();
   Serial.print("LAT=");
