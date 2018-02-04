@@ -51,6 +51,8 @@ void setup() {
   Serial.println(lon);
 
   astro.Setup(lat, lon);
+  
+  SerialDebug = false;
 }
 
 // Boucle principale
@@ -72,10 +74,13 @@ void loop() {
       magCount[1], magCount[0], -magCount[2] // Les axes y et x sont inverses
     );
   }
+  if (SerialDebug){
+    vect.Trace();
+  }
   delay(100);
-  astro.Calc(vect.Azimut(), vect.Altitude());
   
   if (Serial.available() > 0) {
+    astro.Calc(vect.Azimut(), vect.Altitude());
     astro.Communication();
   }
 }

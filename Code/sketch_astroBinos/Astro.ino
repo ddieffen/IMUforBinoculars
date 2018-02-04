@@ -81,7 +81,12 @@ void Astro::Communication() {
         deg = "+" + deg;
       }
       Serial.print(deg + "*" + Zeros(mm) + "#");
-
+    }
+    if (input[1] == 'D' && input[2] == 'E' && input[3] == 'B' && input[4] == '#') {
+      SerialDebug = true;
+    }
+    if (input[1] == 'N' && input[2] == 'O' && input[3] == 'D' && input[4] == '#') {
+      SerialDebug = false;
     }
   }
 }

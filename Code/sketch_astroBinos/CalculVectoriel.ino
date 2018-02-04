@@ -7,9 +7,11 @@ class CalculVectoriel
     float phii, phij ; // angle de rotation décomposé sur i, j, k (normalement k = 0)
     float ri, rj, rk;      // vecteur de rotation permettant de définir un référentiel horizontal
     //  float a[3];      //vecteur acceleration (x, y, z)
+    int i;
+    int dim = 20;  // number of elements for average 
     float mi, mj, mk;      //vecteur magnitude sur le plan horizontal (i, j, k)
-    float ax, ay, az;
-    float mx, my, mz;
+    float ax = 0.0f, ay = 0.0f, az = 1.0f;
+    float mx = 0.0f, my = 0.0f, mz = 1.0f;
     float thetax, thetam, theta;
     ;
 
@@ -48,7 +50,17 @@ void CalculVectoriel::Trace() {
 }
 
 
-void CalculVectoriel::TraiterMesure(float ax, float ay, float az, float mx, float my, float mz) {
+void CalculVectoriel::TraiterMesure(float vax, float vay, float vaz, float vmx, float vmy, float vmz) {
+  //Normalisation
+  float an, mn;
+  an = sqrt(vax * vax + vay * vay + vaz * vaz);
+  mn = sqrt(vmx * vmx + vmy * vmy + vmz * vmz);
+  ax = ax * (dim -1)/dim + vax / dim / an;
+  ay = ay * (dim -1)/dim + vay / dim / an;
+  az = az * (dim -1)/dim + vaz / dim /an ;
+  mx = mx * (dim -1)/dim + vmx / dim / mn;
+  my = my * (dim -1)/dim + vmy / dim / mn;
+  mz = mz * (dim -1)/dim + vmz / dim / mn;
   DefinirRotation(ax, ay, az);
   DefinirMagnitudeHorizontale(mx, my, mz);
 }
