@@ -1,4 +1,6 @@
 #include <TinyGPS.h> //for NMEA0183 GPS data parsing
+
+// Classe utilisée pour communiquer avec le GPS
 class Gps
 {
   private:
@@ -11,7 +13,6 @@ class Gps
     unsigned long fix_age, time, date, speed, course;
 
     uint32_t lastupdate = 0;
-    unsigned long age;
     char raw; // raw GPS data
     bool newdata;
 
@@ -30,40 +31,48 @@ void Gps::Setup() {
 }
 
 bool Gps::Read() {
+
   newdata = false;
+  
   if (Uart.available()) {
     raw = Uart.read();
-    //Serial.print(raw);  // uncomment to see raw GPS data
     if (tgps.encode(raw)) {
       newdata = true;
     }
   }
+  
   if (newdata)
   {
-    tgps.get_position(&this->lat, &this->lon, &this->age);
-    // time in hhmmsscc, date in ddmmyy
-    tgps.get_datetime(&date, &time, &fix_age);
-
-    if (SerialDebug) {
-      Serial.println("");
-      Serial.print("Date ");
-      Serial.print(date);
-      Serial.print(" ");
-      Serial.print(time);
-      Serial.println("");
-      Serial.println("LAT=");
-      Serial.println(this->lat == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : this->lat, 6);
-      Serial.println(" LON=");
-      Serial.println(this->lon == TinyGPS::GPS_INVALID_F_ANGLE ? 0.0 : this->lon, 6);
-      Serial.println(" SAT=");
-      Serial.println(tgps.satellites() == TinyGPS::GPS_INVALID_SATELLITES ? 0 : tgps.satellites());
-      Serial.println(" PREC=");
-      Serial.println(tgps.hdop() == TinyGPS::GPS_INVALID_HDOP ? 0 : tgps.hdop());
-    }
-
+    tgps.get_position(&this->lat, &this->lon, &this->fix_age);
+    int Year;
+	byte Month, Day, Hour, Minute, Second;
+	// retrieves +/- lat/long in 100000ths of a degree
+	tgps.get_position(&lat, &lon, &fix_age);
+	// time in hhmmsscc, date in ddmmyy
+	tgps.crack_datetime(&Year, &Month, &Day, &Hour, &Minute, &Second, NULL, &fix_age);
+	
+	if (fix_age == TinyGPS::GPS_INVALID_AGE)
+		Serial.println("No fix detected, waiting...");
+	else if (fix_age > 5000)
+		Serial.println("Warning: possible stale data! waiting...");
+	else{
+		// set the Time to the latest GPS reading
+		delay(500); //delay to avoid writing accidently to EEPROM too many times
+		Serial.println("Data is current. Setting up the RTC date and time.");
+		setTime(Hour, Minute, Second, Day, Month, Year);
+		Serial.println("Saving location to EEPROM.");
+		l_Lat2EEPROM(lat);
+		l_Lon2EEPROM(lon);
+		serialPrintRTCdateTime();
+		Serial.println("Lat: " + String(lat) + " Lon: " + String(lon));
+	}
   }
-  return newdata;
+  else
+  {
+	  Serial.println("No valid data, waiting for GPS...");
+  }
 
+  return newdata;
 }
 
 long Gps::Latitude() {
@@ -78,4 +87,3 @@ unsigned long Gps::Date() {
 unsigned long Gps::Time() {
   return this->time;
 }
-

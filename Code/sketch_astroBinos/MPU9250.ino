@@ -1,5 +1,6 @@
 #include <Wire.h> //for I2C communication
 
+// Classe utilisée pour initialiser et communiquer avec le MPU9250
 class Mpu9250
 {
   private:
@@ -336,30 +337,8 @@ void Mpu9250::Setup()
 {
   float   SelfTest[6];    // holds results of gyro and accelerometer self test
 
-  Uart = HardwareSerial();
   Wire.begin();
   TWBR = 12;  // 400 kbit/sec I2C speed
-  Serial.begin(9600); // for USB terminal and LX200 interface
-  Uart.begin(9600); // for GPS NMEA0183 interface
-
-  // Set up the interrupt pin, its set as active high, push-pull
-  //  pinMode(intPin, INPUT);
-  //  digitalWrite(intPin, LOW);
-  pinMode(myLed, OUTPUT);
-  digitalWrite(myLed, HIGH);
-
-  delay(1000);
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
-  delay(1000);
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
-  delay(1000);
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
-  delay(1000);
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
-  delay(1000);
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
-
-  Serial.println("Ports et LED initialisés");
 
   // Start device display with ID of sensor;
   Serial.println("MPU9250");

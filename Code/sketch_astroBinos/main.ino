@@ -1,27 +1,32 @@
-
-// Centrale inertielle
+// Classe utilisée pour initialiser et communiquer avec le MPU9250
 Mpu9250 mpu9250;
-
+// Classe utilisée pour réaliser les calculs de quaternions et d'attitude
 Imu imu;
-
-// GPS
+// Classe utilisée pour communiquer avec le GPS
 Gps gps;
-
-// Communication LX2000 et debogage
+// Classe utilisée pour la communication au format LX2000
 Astro astro;
-
+// Classe utilisée pour réaliser les calculs de quaternions et d'attitude
 CalculVectoriel vect;
 
-
+// Initialisation des variables et instantiation des classes
 void setup() {
-  bool localize = false;
   Serial.begin(9600);
+  pinMode(myLed, OUTPUT);
+  setSyncProvider(getTeensy3Time);
+  Serial.println("Current RTC date:");
+  serialPrintRTCdateTime();
+  delay(5000); // long delay so that users have time to read message on the serial port after startup
+  lat = l_EEPROM2Lat();
+  lon = l_EEPROM2Lon();
+  Serial.println("Current EEPROM position:");
+  Serial.println("Lat: " + String(lat) + " Lon: " + String(lon));
+  bool localize = false;
+
   gps.Setup();
   mpu9250.Setup();
   imu.Setup();
-  //  vect.Setup();
 
-  delay(1000);
   Serial.print("Read from GPS");
 
   // Recherche signal GPS
@@ -29,8 +34,8 @@ void setup() {
   do {
     delay(10);
     localize = gps.Read();
-    //Serial.print("Read ");
     timeout--;
+	blinkLed(3, myLed);
   }  while (localize == false && timeout > 0);
   
   lat = gps.Latitude();
@@ -39,23 +44,17 @@ void setup() {
   Serial.print( lat );
   Serial.print(" LON=");
   Serial.println( lon );
-  if (lat == 0){
-    lon = -4.0979; //longitude Est
-    lat = 47.9975; //latitude Nord
-  }
-  astro.Setup( lat, lon);
-
+ 
+  astro.Setup(lat, lon);
 }
 
-
+// Boucle principale
 void loop() {
-  //float az, al, de, ra, lst;
   //Serial.println("Attente données");
   if (mpu9250.IsDataReady()) {
     mpu9250.readAccelData(accelCount);
     mpu9250.readGyroData(gyroCount);
     mpu9250.readMagData(magCount);
-
 
     // Calculer l'angle
 /*    imu.Compute(
@@ -63,39 +62,21 @@ void loop() {
       gyroCount[0],  gyroCount[1],   -gyroCount[2],
       magCount[1],   magCount[0],    -magCount[2]
     );
-    Serial.println("");
-    Serial.print("Pitch = ");
-    Serial.print(imu.Pitch());
-    Serial.print("Rall = ");
-    Serial.print(imu.Roll());
-    Serial.print(" ; Yaw = ");
-    Serial.println(imu.Yaw());
 */
     vect.TraiterMesure(
-      accelCount[0],
-      accelCount[1],
-      -accelCount[2],
-      magCount[1],
-      magCount[0], // Les axes y et x sont inverses
-      -magCount[2]
+      accelCount[0], accelCount[1], -accelCount[2],
+      magCount[1], magCount[0], -magCount[2] // Les axes y et x sont inverses
     );
-    //vect.Trace();
-    /*    Serial.print("Azimut ");
-        Serial.println(vect.Azimut());
-        Serial.print("Altitude ");
-        Serial.println(vect.Altitude());
-    */
-    //Serial.println("");
-
-
-
   }
   delay(100);
   astro.Calc(vect.Azimut(), vect.Altitude());
-  //astro.Trace();
   
   if (Serial.available() > 0) {
     astro.Communication();
   }
 }
 
+time_t getTeensy3Time()
+{
+  return Teensy3Clock.get();
+}

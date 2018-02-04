@@ -1,3 +1,4 @@
+// Classe utilisée pour la communication au format LX2000
 class Astro
 {
   private:

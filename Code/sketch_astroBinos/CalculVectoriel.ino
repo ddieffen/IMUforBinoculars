@@ -1,5 +1,4 @@
-/* Classe Calcul Vectoriel
-*/
+// Classe utilisée pour réaliser les calculs de quaternions et d'attitude
 class CalculVectoriel
 {
   private:
@@ -26,6 +25,9 @@ class CalculVectoriel
     float Altitude();
     void Trace();
 };
+
+
+//Affiche les valeurs d'accélération, d'altitude et d'azimuth sur le port série
 void CalculVectoriel::Trace() {
   Serial.print("Mesure ax ; ");
   Serial.print(ax, 6);

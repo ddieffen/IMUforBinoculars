@@ -8,11 +8,19 @@
 #include <TinyGPS.h>
 #include <EEPROM.h>
 
-int myLed = 13; // Set up pin 13 led for toggling
-int state = 1; // State of the led pin
+// Set up pin 13 led for toggling
+int myLed = 13; 
+// State of the led pin
+int state = 1; 
 
-long lat, lon;
+//latitude Nord default latitude and longitude
+long lat = 47.9975; 
+//longitude Est default latitude and longitude
+long lon = -4.0979;
+//defaut magnetic declinaison
+long magdec = -3; 
 
+//if set to true, lots of debugging information will be available on the serial port
 bool SerialDebug = true;
 
 float accelCount[3];
