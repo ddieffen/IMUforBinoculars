@@ -11,7 +11,7 @@ void blinkLed(int flashes, int ledPin) {
     digitalWrite(ledPin, HIGH);
     delay(50);
     digitalWrite(ledPin, LOW);
-    delay(200);
+    delay(100);
   }
 }
 

@@ -13,10 +13,10 @@ CalculVectoriel vect;
 void setup() {
   Serial.begin(9600);
   pinMode(myLed, OUTPUT);
+  delay(5000); // long delay so that users have time to read message on the serial port after startup
   setSyncProvider(getTeensy3Time);
   Serial.println("Current RTC date:");
   serialPrintRTCdateTime();
-  delay(5000); // long delay so that users have time to read message on the serial port after startup
   lat = l_EEPROM2Lat();
   lon = l_EEPROM2Lon();
   Serial.println("Current EEPROM position:");
@@ -27,30 +27,34 @@ void setup() {
   mpu9250.Setup();
   imu.Setup();
 
-  Serial.print("Read from GPS");
-
+  Serial.println("Read from GPS");
   // Recherche signal GPS
-  int timeout = 2000;
+  int timeout = 120;
   do {
-    delay(10);
+    delay(1000);
+	Serial.print(String(timeout) + " ");
     localize = gps.Read();
     timeout--;
 	blinkLed(3, myLed);
   }  while (localize == false && timeout > 0);
-  
-  lat = gps.Latitude();
-  lon = gps.Longitude();
+  if (localize) {
+	  lat = gps.Latitude();
+	  lon = gps.Longitude();
+	  Serial.println("New Lat/Lon from GPS");
+  }
+  else {
+	  Serial.println("Lat/Lon read from EEPROM");
+  }
   Serial.print("LAT=");
-  Serial.print( lat );
+  Serial.print(lat);
   Serial.print(" LON=");
-  Serial.println( lon );
- 
+  Serial.println(lon);
+
   astro.Setup(lat, lon);
 }
 
 // Boucle principale
 void loop() {
-  //Serial.println("Attente données");
   if (mpu9250.IsDataReady()) {
     mpu9250.readAccelData(accelCount);
     mpu9250.readGyroData(gyroCount);
