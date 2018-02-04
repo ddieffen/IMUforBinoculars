@@ -1,27 +1,55 @@
 class Astro
 {
   private:
-    float pitch, yaw, roll;
+    //float pitch, yaw, roll;
     char input[20];
     //Computed values for right ascention and declinaison
     double ra = 0;
     double de = 0;
+    double lat, lng, lst;
     String Zeros(double num);
     double Declinaison(double az, double al, double latN);
     double LocalSideralTime(int YYYY, int MM, int DD, int hh, int mm, int ss, int lonE);
     double RightAscention(double az, double al, double latN, double de, double lst);
 
+    
+    // ToDO : Mettre à jour l'heure
+    int uYYYY = 2018;
+    int uMM = 02;
+    int uDD = 3;
+    int uhh = 21;
+    int umm = 11;
+    int uss = 0;
+//    int lonE = -4.0979; //longitude Est
+//    int latN = 47.9975; //latitude Nord
+
   public:
-    void Setup();
+    void Setup(double lat, double lng);
+    void Calc(float az, float al);
     void Communication();
+    void Trace();
 };
 
-void Astro::Setup() {
-  // Initialisation port série
+void Astro::Setup(double vlat, double vlng) {
   // Récupération coordonnées GPS
-
+  lat = vlat; // latitude GPS
+  lng = vlng; // longitude GPS
 }
 
+void Astro::Calc(float az, float al){
+  lst = LocalSideralTime( uYYYY,  uMM, uDD, uhh, umm, uss, lon);
+  de = Declinaison( az, al, lat);
+  ra = RightAscention(az, al, lat, de, lst);
+}
+
+void Astro::Trace(){
+  Serial.print("lst, de, ra ; ");
+  Serial.print(lst);
+  Serial.print(" ; ");
+  Serial.print(de, 6);
+  Serial.print(" ; ");
+  Serial.println(ra, 6);
+}
 void Astro::Communication() {
   {
     int i = 0;
@@ -56,6 +84,7 @@ void Astro::Communication() {
     }
   }
 }
+
 
 ///
 /// Calculate declinaison given Altitude, Azimuth, Latitude N and Longitude E
