@@ -18,7 +18,7 @@
 #define __MK20DX256__
 #define TEENSYDUINO 140
 #define ARDUINO 10803
-#define F_CPU 96000000
+#define F_CPU 72000000
 #define USB_SERIAL
 #define LAYOUT_US_ENGLISH
 #define __cplusplus 201103L

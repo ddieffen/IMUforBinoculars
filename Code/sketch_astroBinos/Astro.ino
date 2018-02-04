@@ -13,7 +13,7 @@ class Astro
     double LocalSideralTime(int YYYY, int MM, int DD, int hh, int mm, int ss, int lonE);
     double RightAscention(double az, double al, double latN, double de, double lst);
 
-    
+
     // ToDO : Mettre à jour l'heure
     int uYYYY = 2018;
     int uMM = 02;
@@ -21,8 +21,8 @@ class Astro
     int uhh = 21;
     int umm = 11;
     int uss = 0;
-//    int lonE = -4.0979; //longitude Est
-//    int latN = 47.9975; //latitude Nord
+    //    int lonE = -4.0979; //longitude Est
+    //    int latN = 47.9975; //latitude Nord
 
   public:
     void Setup(double lat, double lng);
@@ -37,13 +37,13 @@ void Astro::Setup(double vlat, double vlng) {
   lng = vlng; // longitude GPS
 }
 
-void Astro::Calc(float az, float al){
-  lst = LocalSideralTime( uYYYY,  uMM, uDD, uhh, umm, uss, lon);
+void Astro::Calc(float az, float al) {
+  lst = LocalSideralTime( uYYYY,  uMM, uDD, uhh, umm, uss, lonE);
   de = Declinaison( az, al, lat);
   ra = RightAscention(az, al, lat, de, lst);
 }
 
-void Astro::Trace(){
+void Astro::Trace() {
   Serial.print("lst, de, ra ; ");
   Serial.print(lst);
   Serial.print(" ; ");
