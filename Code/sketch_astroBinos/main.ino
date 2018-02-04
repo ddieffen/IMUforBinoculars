@@ -17,10 +17,10 @@ void setup() {
   setSyncProvider(getTeensy3Time);
   Serial.println("Current RTC date:");
   serialPrintRTCdateTime();
-  lat = l_EEPROM2Lat();
-  lon = l_EEPROM2Lon();
+  latN = l_EEPROM2Lat();
+  lonE = l_EEPROM2Lon();
   Serial.println("Current EEPROM position:");
-  Serial.println("Lat: " + String(lat) + " Lon: " + String(lon));
+  Serial.println("Lat: " + String(latN) + " Lon: " + String(lonE));
   bool localize = false;
 
   gps.Setup();
@@ -31,27 +31,25 @@ void setup() {
   // Recherche signal GPS
   int timeout = 120;
   do {
-    delay(1000);
-	Serial.print(String(timeout) + " ");
+    Serial.print(String(timeout) + " ");
     localize = gps.Read();
-    timeout--;
-	blinkLed(3, myLed);
+    timeout -= 5;
+    blinkLed(3, myLed);
   }  while (localize == false && timeout > 0);
   if (localize) {
-	  lat = gps.Latitude();
-	  lon = gps.Longitude();
-	  Serial.println("New Lat/Lon from GPS");
+    latN = gps.LatitudeN();
+    lonE = gps.LongitudeE();
+    Serial.println("New Lat/Lon from GPS");
   }
   else {
-	  Serial.println("Lat/Lon read from EEPROM");
+    Serial.println("Lat/Lon read from EEPROM");
   }
   Serial.print("LAT=");
-  Serial.print(lat);
+  Serial.print(latN);
   Serial.print(" LON=");
-  Serial.println(lon);
+  Serial.println(lonE);
 
-  astro.Setup(lat, lon);
-  
+  astro.Setup(latN, lonE);
   SerialDebug = false;
 }
 
@@ -63,12 +61,12 @@ void loop() {
     mpu9250.readMagData(magCount);
 
     // Calculer l'angle
-/*    imu.Compute(
-      accelCount[0], accelCount[1],  -accelCount[2],
-      gyroCount[0],  gyroCount[1],   -gyroCount[2],
-      magCount[1],   magCount[0],    -magCount[2]
-    );
-*/
+    /*    imu.Compute(
+          accelCount[0], accelCount[1],  -accelCount[2],
+          gyroCount[0],  gyroCount[1],   -gyroCount[2],
+          magCount[1],   magCount[0],    -magCount[2]
+        );
+    */
     vect.TraiterMesure(
       accelCount[0], accelCount[1], -accelCount[2],
       magCount[1], magCount[0], -magCount[2] // Les axes y et x sont inverses
@@ -78,7 +76,7 @@ void loop() {
     vect.Trace();
   }
   delay(100);
-  
+
   if (Serial.available() > 0) {
     astro.Calc(vect.Azimut(), vect.Altitude());
     astro.Communication();

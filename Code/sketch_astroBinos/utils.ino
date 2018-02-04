@@ -1,8 +1,8 @@
 /* Utilities
-by: ddieffen, xgravouil
-date: January, 25 2017
-license: Beerware - Use this code however you'd like. If you
-find it useful you can buy me a beer some time.
+  by: ddieffen, xgravouil
+  date: January, 25 2017
+  license: Beerware - Use this code however you'd like. If you
+  find it useful you can buy me a beer some time.
 */
 
 //Flashes n times the LED
@@ -15,7 +15,7 @@ void blinkLed(int flashes, int ledPin) {
   }
 }
 
-//Print à float number in a human readable way
+//Print ï¿½ float number in a human readable way
 void printFloat(double number, int digits)
 {
   // Handle negative numbers
@@ -73,7 +73,7 @@ void printDigits(int digits) {
 
 //Stores latitude to EEPROM addr 0
 void l_Lat2EEPROM(long lat) {
-	l_EEPROMwrite(lat, 0);
+  l_EEPROMwrite(lat, 0);
 }
 
 //Stores latitude to EEPROM addr 4

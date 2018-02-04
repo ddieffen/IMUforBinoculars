@@ -21,8 +21,8 @@ class Imu
     void GetAcceleration();
     void MadgwickQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz);
     void MahonyQuaternionUpdate(float ax, float ay, float az, float gx, float gy, float gz, float mx, float my, float mz);
-	void Trace();
-	float Yaw();
+    void Trace();
+    float Yaw();
     float Pitch();
     float Roll();
 
@@ -31,22 +31,22 @@ class Imu
 
 //Affiche les valeurs d'accélération, d'altitude et d'azimuth sur le port série
 void Imu::Trace() {
-	Serial.print("Mesure ax ; ");
-	Serial.print(ax, 6);
-	Serial.print(" ; Mesure ay ; ");
-	Serial.print(ay, 6);
-	Serial.print(" ; Mesure az ; ");
-	Serial.print(az, 6);
-	Serial.print(" ; Mesure mx ; ");
-	Serial.print(mx, 6);
-	Serial.print(" ; Mesure my ; ");
-	Serial.print(my, 6);
-	Serial.print(" ; Mesure mz ; ");
-	Serial.print(mz, 6);
-	Serial.print(" ; Azimumt  ; ");
-	Serial.print(Yaw());
-	Serial.print(" ; Altitude ; ");
-	Serial.println(Pitch());
+  Serial.print("Mesure ax ; ");
+  Serial.print(ax, 6);
+  Serial.print(" ; Mesure ay ; ");
+  Serial.print(ay, 6);
+  Serial.print(" ; Mesure az ; ");
+  Serial.print(az, 6);
+  Serial.print(" ; Mesure mx ; ");
+  Serial.print(mx, 6);
+  Serial.print(" ; Mesure my ; ");
+  Serial.print(my, 6);
+  Serial.print(" ; Mesure mz ; ");
+  Serial.print(mz, 6);
+  Serial.print(" ; Azimumt  ; ");
+  Serial.print(Yaw());
+  Serial.print(" ; Altitude ; ");
+  Serial.println(Pitch());
 }
 
 
