@@ -31,10 +31,9 @@ void setup() {
   // Recherche signal GPS
   int timeout = 120;
   do {
-    delay(1000);
 	Serial.print(String(timeout) + " ");
     localize = gps.Read();
-    timeout--;
+    timeout-=5;
 	blinkLed(3, myLed);
   }  while (localize == false && timeout > 0);
   if (localize) {

@@ -32,14 +32,19 @@ void Gps::Setup() {
 
 bool Gps::Read() {
 
-  newdata = false;
-  
-  if (Uart.available()) {
-    raw = Uart.read();
-    if (tgps.encode(raw)) {
-      newdata = true;
-    }
-  }
+	bool newdata = false;
+	unsigned long start = millis();
+	
+	// Every 5 seconds we print an update
+	while (millis() - start < 5000) {
+	    if (Uart.available()) {
+			char c = Uart.read();
+			Serial.print(c);  // uncomment to see raw GPS data
+			if (tgps.encode(c)) {
+				newdata = true;
+			}
+		}
+	}
   
   if (newdata)
   {
