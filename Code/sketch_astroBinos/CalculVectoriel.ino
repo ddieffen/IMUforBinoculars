@@ -13,7 +13,8 @@ class CalculVectoriel
     float ax = 0.0f, ay = 0.0f, az = 1.0f;
     float mx = 0.0f, my = 0.0f, mz = 1.0f;
     float thetax, thetam, theta;
-    ;
+    float xi, xj ; //, xk; // vecteur x(1,0,0) exprime sur le referentiel géocentré i, j, k
+   ;
 
   public:
     // Variables publiques
@@ -43,15 +44,43 @@ void CalculVectoriel::Trace() {
   Serial.print(my, 6);
   Serial.print(" ; Mesure mz ; ");
   Serial.print(mz, 6);
-  Serial.print(" ; Azimumt  ; ");
+  Serial.print(" ; Azimut  ; ");
   Serial.print(Azimut());
   Serial.print(" ; Altitude ; ");
   Serial.println(Altitude());
+  Serial.print("Value phii, phij, phi, ri, rj, rk ; ");
+  Serial.print(phii, 6);
+  Serial.print(" ; ");
+  Serial.print(phij, 6);
+  Serial.print(" ; ");
+  Serial.print(phi, 6);
+  Serial.print(" ; ");
+  Serial.print(ri, 6);
+  Serial.print(" ; ");
+  Serial.print(rj, 6);
+  Serial.print(" ; ");
+  Serial.print(rk, 6);
+  Serial.print("; Value mi, mj, mk, xi, xj, thetam, thetax ; ");
+  Serial.print(mi, 6);
+  Serial.print(" ; ");
+  Serial.print(mj, 6);
+  Serial.print(" ; ");
+  Serial.print(mk, 6);
+  Serial.print(" ; ");
+  Serial.print(xi, 6);
+  Serial.print(" ; ");
+  Serial.print(xj, 6);
+  Serial.print(" ; ");
+  Serial.print(thetam, 6);
+  Serial.print(" ; ");
+  Serial.println(thetax, 6);
+  
 }
 
 
 void CalculVectoriel::TraiterMesure(float vax, float vay, float vaz, float vmx, float vmy, float vmz) {
-  //Normalisation
+  //Normalisation and filter
+  // to stabilize the result
   float an, mn;
   an = sqrt(vax * vax + vay * vay + vaz * vaz);
   mn = sqrt(vmx * vmx + vmy * vmy + vmz * vmz);
@@ -72,7 +101,7 @@ float CalculVectoriel::Altitude() {
   return -phij * 180.0f / PI;
 }
 float CalculVectoriel::Azimut() {
-  float xi, xj ; //, xk; // vecteur x(1,0,0) exprime sur le referentiel géocentré i, j, k
+  float i, j;
   //  float thetax, thetam, theta;
   // L'azimut correspond à l'angle (360°) entre l'axe x projeté sur le plan (i,j) et le vecteur gravité projeté sur le plan (i,j)
 
@@ -83,19 +112,25 @@ float CalculVectoriel::Azimut() {
 
   // Transformation cooronnées cartésiennes vers coordonnées sphériques
   // Formules sur https://fr.wikipedia.org/wiki/Coordonnées_sphériques
-  if (xj >= 0) {
-    thetax = acos(xi / sqrt(xi * xi + xj * xj) );
-  } else {
-    thetax = 2.0f * PI - acos(xi / sqrt(xi * xi + xj * xj));
+  i = xi / sqrt(xi * xi + xj * xj);
+  // pour tenter d'eviter les "nan" à l'horizontale au nord.
+  if (i > 1.0f) {
+    i = 1.0f;
   }
-  if (mj >= 0) {
+  
+  if (xj >= 0.0f) {
+    thetax = acos(i);
+  } else {
+    thetax = 2.0f * PI - acos(i);
+  }
+  if (mj >= 0.0f) {
     thetam = acos(mi / sqrt(mi * mi + mj * mj) );
   } else {
     thetam = 2.0f * PI - acos(mi / sqrt(mi * mi + mj * mj) );
   }
 
   theta = thetam - thetax;
-  if (theta > PI) {
+  if (theta >= PI) {
     return ((theta - 2.0f * PI)  * 180.0f / PI);
   } else if (theta < -PI) {
     return (theta + 2.0f * PI) * 180.0f / PI;
@@ -122,11 +157,17 @@ void CalculVectoriel::DefinirRotation(float vax, float vay, float vaz) {
   phii  = -asin(ay / sqrt(ay * ay + az * az)) ;
   // Projection de ax sur l'axe z => rotation sur l'axe j
   phij = -asin(ax / sqrt(ax * ax + az * az)) ;
-
+  
   phi = 2.0f * acos(cos(phii / 2.0f) * cos(phij / 2.0f));
-  ri = cos(phij / 2.0f) * sin(phii / 2.0f) / sin(phi / 2.0f);
-  rj = cos(phii / 2.0f) * sin(phij / 2.0f) / sin(phi / 2.0f);
-  rk = sin(phii / 2.0f) * sin(phij / 2.0f) / sin(phi / 2.0f);
+  if (phi != 0.0f ){
+    ri = cos(phij / 2.0f) * sin(phii / 2.0f) / sin(phi / 2.0f);
+    rj = cos(phii / 2.0f) * sin(phij / 2.0f) / sin(phi / 2.0f);
+    rk = sin(phii / 2.0f) * sin(phij / 2.0f) / sin(phi / 2.0f);
+  }else{
+    ri = 0;
+    rj = 1;
+    rk = 0;  
+  }
 }
 
 void CalculVectoriel::DefinirMagnitudeHorizontale(float vmx, float vmy, float vmz) {

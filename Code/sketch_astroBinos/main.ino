@@ -51,6 +51,8 @@ void setup() {
 
   astro.Setup(latN, lonE);
   SerialDebug = false;
+  Serial.println("Initialization complete");
+  Serial.println("Begin loop");
 }
 
 // Boucle principale
@@ -74,6 +76,8 @@ void loop() {
   }
   if (SerialDebug){
     vect.Trace();
+    astro.Calc(vect.Azimut(), vect.Altitude());
+    astro.Trace();
   }
   delay(100);
 
