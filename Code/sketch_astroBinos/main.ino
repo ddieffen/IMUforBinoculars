@@ -45,9 +45,9 @@ void setup() {
     Serial.println("Lat/Lon read from EEPROM");
   }
   Serial.print("LAT=");
-  Serial.print(latN);
+  Serial.print(latN,6);
   Serial.print(" LON=");
-  Serial.println(lonE);
+  Serial.println(lonE,6);
 
   astro.Setup(latN, lonE);
   SerialDebug = false;

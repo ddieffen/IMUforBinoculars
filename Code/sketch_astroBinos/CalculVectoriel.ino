@@ -101,7 +101,7 @@ float CalculVectoriel::Altitude() {
   return -phij * 180.0f / PI;
 }
 float CalculVectoriel::Azimut() {
-  float i, j;
+  float i;
   //  float thetax, thetam, theta;
   // L'azimut correspond à l'angle (360°) entre l'axe x projeté sur le plan (i,j) et le vecteur gravité projeté sur le plan (i,j)
 
@@ -130,9 +130,9 @@ float CalculVectoriel::Azimut() {
   }
 
   theta = thetam - thetax;
-  if (theta >= PI) {
+  if (theta >= 2 * PI) {
     return ((theta - 2.0f * PI)  * 180.0f / PI);
-  } else if (theta < -PI) {
+  } else if (theta < 0.0f) {
     return (theta + 2.0f * PI) * 180.0f / PI;
   } else {
     return theta * 180.0f / PI;

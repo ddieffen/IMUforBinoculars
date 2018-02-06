@@ -83,10 +83,10 @@ bool Gps::Read() {
 
 //Returns latitude in decimal degrees
 long Gps::LatitudeN() {
-  return this->latN ;
+  return this->latN  / 1000000.0f;
 }
 
 //Returns longitude in decimal degrees
 long Gps::LongitudeE() {
-  return this->lonE ;
+  return this->lonE / 1000000.0f;
 };

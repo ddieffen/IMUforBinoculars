@@ -1,4 +1,5 @@
 // Classe utilisée pour la communication au format LX2000
+
 class Astro
 {
   private:
@@ -7,7 +8,7 @@ class Astro
     //Computed values for right ascention and declinaison
     double ra = 0;
     double de = 0;
-    double lat, lng, lst;
+    double latN, lonE, lst;
     String Zeros(double num);
     double Declinaison(double az, double al, double latN);
     double LocalSideralTime(int YYYY, int MM, int DD, int hh, int mm, int ss, int lonE);
@@ -33,14 +34,14 @@ class Astro
 
 void Astro::Setup(double vlat, double vlng) {
   // Récupération coordonnées GPS
-  lat = vlat; // latitude GPS
-  lng = vlng; // longitude GPS
+  latN = vlat; // latitude GPS
+  lonE = vlng; // longitude GPS
 }
 
 void Astro::Calc(float az, float al) {
-  lst = LocalSideralTime( uYYYY,  uMM, uDD, uhh, umm, uss, lonE);
-  de = Declinaison( az, al, lat);
-  ra = RightAscention(az, al, lat, de, lst);
+  lst = LocalSideralTime( year(),  month(), day(), hour(), minute(), second(), lonE);
+  de = Declinaison( az, al, latN);
+  ra = RightAscention(az, al, latN, de, lst);
 }
 
 void Astro::Trace() {
@@ -96,7 +97,7 @@ void Astro::Communication() {
 /// Calculate declinaison given Altitude, Azimuth, Latitude N and Longitude E
 /// Formulas obtained from http://129.79.46.40/~foxd/cdrom/musings/formulas/formulas.htm
 ///
-/// az : Azimuth (0 from South growing when turning East) in decimal degrees
+/// az : Azimuth (0 from North growing when turning East) in decimal degrees
 /// al : Altitude in decimal degrees
 /// latN : Latitude North in decimal degrees
 ///
