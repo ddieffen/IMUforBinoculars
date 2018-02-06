@@ -19,8 +19,8 @@ class Gps
   public:
     void Setup();
     bool Read();
-    long LatitudeN();
-    long LongitudeE();
+    double LatitudeN();
+    double LongitudeE();
 };
 
 //Sets the UART speed for reading GPS NMEA0183
@@ -67,8 +67,8 @@ bool Gps::Read() {
       Serial.println("Data is current. Setting up the RTC date and time.");
       setTime(Hour, Minute, Second, Day, Month, Year);
       Serial.println("Saving location to EEPROM.");
-      l_Lat2EEPROM(latN);
-      l_Lon2EEPROM(lonE);
+      l_Lat2EEPROM((long)latN / 100000);
+      l_Lon2EEPROM((long)lonE / 100000);
       serialPrintRTCdateTime();
       Serial.println("Lat: " + String(latN) + " Lon: " + String(lonE));
     }
@@ -77,16 +77,15 @@ bool Gps::Read() {
   {
     Serial.println("No valid data, waiting for GPS...");
   }
-
   return newdata;
 }
 
 //Returns latitude in decimal degrees
-long Gps::LatitudeN() {
-  return this->latN  / 1000000.0f;
+double Gps::LatitudeN() {
+  return (double) this->latN  / 1000000;
 }
 
 //Returns longitude in decimal degrees
-long Gps::LongitudeE() {
-  return this->lonE / 1000000.0f;
+double Gps::LongitudeE() {
+  return (double) this->lonE / 1000000;
 };

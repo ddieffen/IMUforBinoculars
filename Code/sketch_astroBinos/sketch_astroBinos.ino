@@ -14,9 +14,9 @@ int myLed = 13;
 int state = 1;
 
 //latitude Nord default latitude and longitude
-long latN = 47.9975;
+double latN = 47.9975;
 //longitude Est default latitude and longitude
-long lonE = -4.0979;
+double lonE = -4.0979;
 //defaut magnetic declinaison
 long magdec = -3;
 
