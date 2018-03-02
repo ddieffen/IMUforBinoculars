@@ -70,19 +70,19 @@ void loop() {
         );
     */
     vect.TraiterMesure(
-      accelCount[0], accelCount[1], -accelCount[2],
-      magCount[1], magCount[0], -magCount[2] // Les axes y et x sont inverses
+      accelCount[0], -accelCount[1], -accelCount[2],
+      magCount[1], magCount[0], magCount[2] // Les axes y et x sont inverses
     );
   }
   if (SerialDebug){
     vect.Trace();
-    astro.Calc(vect.Azimut(), vect.Altitude());
+    astro.Calc(vect.Azimut(), vect.Pitch());
     astro.Trace();
   }
   delay(100);
 
   if (Serial.available() > 0) {
-    astro.Calc(vect.Azimut(), vect.Altitude());
+    astro.Calc(vect.Azimut(), vect.Pitch());
     astro.Communication();
   }
 }
