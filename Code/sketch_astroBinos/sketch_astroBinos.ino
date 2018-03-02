@@ -25,4 +25,6 @@ bool SerialDebug = true;
 
 float accelCount[3];
 float gyroCount[3];
+int16_t magData[3];
 float magCount[3];
+

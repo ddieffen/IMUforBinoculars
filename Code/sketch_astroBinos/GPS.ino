@@ -67,8 +67,8 @@ bool Gps::Read() {
       Serial.println("Data is current. Setting up the RTC date and time.");
       setTime(Hour, Minute, Second, Day, Month, Year);
       Serial.println("Saving location to EEPROM.");
-      l_Lat2EEPROM((long)latN / 100000);
-      l_Lon2EEPROM((long)lonE / 100000);
+      l_Lat2EEPROM((long)latN / 1000000);
+      l_Lon2EEPROM((long)lonE / 1000000);
       serialPrintRTCdateTime();
       Serial.println("Lat: " + String(latN) + " Lon: " + String(lonE));
     }

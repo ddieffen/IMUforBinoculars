@@ -115,4 +115,38 @@ long l_EEPROMread(int address) {
   return recomb;
 }
 
+void Mpu9250GetTrace() {
+    Serial.print(" ; Valeurs base mx, my, mz (int) ; ");
+    Serial.print( magData[0] );
+    Serial.print(" ; ");
+    Serial.print( magData[1] );
+    Serial.print(" ; ");
+    Serial.print( magData[2]);
+
+    Serial.print(" ; mx, my, mz calibrées (Tesla); ");
+    Serial.print( magCount[0] );
+    Serial.print(" ; ");
+    Serial.print( magCount[1] );
+    Serial.print(" ; ");
+    Serial.print( magCount[2]);
+
+    
+    Serial.print("; ax, ay, az ;");
+    Serial.print( accelCount[0] );
+    Serial.print(" ; ");
+    Serial.print( accelCount[1] );
+    Serial.print(" ; ");
+    Serial.print( accelCount[2]);
+    
+    Serial.print(" ; gx, gy, gz ; ");
+    Serial.print( gyroCount[0] );
+    Serial.print(" ; ");
+    Serial.print( gyroCount[1] );
+    Serial.print(" ; ");
+    Serial.print( gyroCount[2]);
+    
+
+    Serial.println("");
+}
+
 

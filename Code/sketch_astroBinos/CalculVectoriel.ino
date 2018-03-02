@@ -6,7 +6,7 @@ class CalculVectoriel
     double x, y;
     double ax, ay, az;
     double mx, my, mz;
-    int dim = 10;  // number of elements for average 
+    int dim = 20;  // number of elements for average 
   
   
   public:

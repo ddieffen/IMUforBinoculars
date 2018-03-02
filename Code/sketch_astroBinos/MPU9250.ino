@@ -186,7 +186,6 @@ class Mpu9250
     void initMPU9250();
     void MPU9250SelfTest(float * destination); // Should return percent deviation from factory trim values, +/- 14 or less deviation is a pass
     uint8_t readByte(uint8_t address, uint8_t subAddress);
-    void readMagData(int16_t * destination); // Read the x/y/z adc values
     void readGyroData(int16_t * destination);  // Read the x/y/z adc values
     void readAccelData(int16_t * destination);
 
@@ -197,8 +196,10 @@ class Mpu9250
     float getAres();
     void readGyroData(float * destination);  // Read the x/y/z adc values
     float getGres();
+    void readMagData(int16_t * destination); // Read the x/y/z adc values
     void readMagData(float * destination); // Read the x/y/z adc values
     float getMres();
+    float getTrace();
 
 
     ;
@@ -207,6 +208,7 @@ class Mpu9250
 bool Mpu9250::IsDataReady() {
   return (readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01 );
 }
+
 
 float Mpu9250::getMres() {
   float mRes = 0.;
@@ -327,9 +329,10 @@ void Mpu9250::readMagData(float * destination)
 {
   int16_t magCount[3];
   readMagData(magCount);
-  destination[0] = (float)magCount[0] * getMres();  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = (float)magCount[1] * getMres();
-  destination[2] = (float)magCount[2] * getMres();
+  destination[0] = ((float)magCount[0] + magBias[0]) * magScale[0] * getMres();  // Turn the MSB and LSB into a signed 16-bit value
+  destination[1] = ((float)magCount[1] + magBias[1]) * magScale[1] * getMres() ;
+  destination[2] = ((float)magCount[2] + magBias[2]) * magScale[2] * getMres();
+
 }
 
 
@@ -419,7 +422,24 @@ void Mpu9250::Setup()
     initAK8963(magCalibration); Serial.println("AK8963 initialized for active data mode...."); // Initialize device for active mode read of magnetometer
     getMres();
     magcalMPU9250(magBias, magScale);
-
+    
+/*    // Valeurs de tests
+    magBias[0] = 6.0;
+    magBias[1] = -39.0;
+    magBias[2] = 81.0;
+    magScale[0] = 1.0;
+    magScale[1] = 1.025;
+    magScale[2] = 0.962;
+*/
+/*    
+ // Valeurs pour annuler le calibrage 
+    magBias[0] = 0.0;
+    magBias[1] = 0.0;
+    magBias[2] = 0.0;
+    magScale[0] = 1.0;
+    magScale[1] = 1.0;
+    magScale[2] = 1.0;
+*/
     if (SerialDebug) {
       //  Serial.println("Calibration values: ");
       Serial.print("X-Axis sensitivity adjustment value "); Serial.println(magCalibration[0], 2);

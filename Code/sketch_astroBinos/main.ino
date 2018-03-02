@@ -60,6 +60,7 @@ void loop() {
   if (mpu9250.IsDataReady()) {
     mpu9250.readAccelData(accelCount);
     mpu9250.readGyroData(gyroCount);
+    mpu9250.readMagData(magData);
     mpu9250.readMagData(magCount);
 
     // Calculer l'angle
@@ -75,6 +76,7 @@ void loop() {
     );
   }
   if (SerialDebug){
+    Mpu9250GetTrace();
     vect.Trace();
     astro.Calc(vect.Azimut(), vect.Pitch());
     astro.Trace();
