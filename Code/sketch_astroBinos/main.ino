@@ -87,6 +87,14 @@ void loop() {
     astro.Calc(vect.Azimut(), vect.Pitch());
     astro.Communication();
   }
+  if (MagCalibrate) {
+    mpu9250.magRecalibrate();
+    MagCalibrate = false;
+  }
+  if (MagCalibRaz) {
+    mpu9250.magCalibRaz();
+    MagCalibRaz = false;
+  }
 }
 
 time_t getTeensy3Time()

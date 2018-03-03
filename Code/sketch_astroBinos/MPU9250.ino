@@ -178,16 +178,16 @@ class Mpu9250
     //    float   SelfTest[6];    // holds results of gyro and accelerometer self test
 
     void readBytes(uint8_t address, uint8_t subAddress, uint8_t count, uint8_t * dest);
-    void magcalMPU9250(float * dest1, float * dest2);
     //    void readMagData(int16_t * destination);
     void initAK8963(float * destination);
+    void magcalMPU9250(float * dest1, float * dest2);
     void writeByte(uint8_t address, uint8_t subAddress, uint8_t data);
-    void calibrateMPU9250(float * dest1, float * dest2);
     void initMPU9250();
     void MPU9250SelfTest(float * destination); // Should return percent deviation from factory trim values, +/- 14 or less deviation is a pass
     uint8_t readByte(uint8_t address, uint8_t subAddress);
     void readGyroData(int16_t * destination);  // Read the x/y/z adc values
     void readAccelData(int16_t * destination);
+    void calibrateMPU9250(float * dest1, float * dest2);
 
   public:
     void Setup();
@@ -199,9 +199,8 @@ class Mpu9250
     void readMagData(int16_t * destination); // Read the x/y/z adc values
     void readMagData(float * destination); // Read the x/y/z adc values
     float getMres();
-    float getTrace();
-
-
+    void magRecalibrate();
+    void magCalibRaz(); // Remise à 0 de la calibration de la magnitude
     ;
 };
 
@@ -329,9 +328,9 @@ void Mpu9250::readMagData(float * destination)
 {
   int16_t magCount[3];
   readMagData(magCount);
-  destination[0] = ((float)magCount[0] + magBias[0]) * magScale[0] * getMres();  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = ((float)magCount[1] + magBias[1]) * magScale[1] * getMres() ;
-  destination[2] = ((float)magCount[2] + magBias[2]) * magScale[2] * getMres();
+  destination[0] = ((float)magCount[0] - magBias[0]) * magScale[0] ;  // Turn the MSB and LSB into a signed 16-bit value
+  destination[1] = ((float)magCount[1] - magBias[1]) * magScale[1] ;
+  destination[2] = ((float)magCount[2] - magBias[2]) * magScale[2] ;
 
 }
 
@@ -455,10 +454,45 @@ void Mpu9250::Setup()
     Serial.println("ASAZ ");
     Serial.println(magCalibration[2], 2);
 
+    Serial.print("magBias[x] : "); Serial.println(magBias[0]);
+    Serial.print("magBias[y] : "); Serial.println(magBias[1]);
+    Serial.print("magBias[z] : "); Serial.println(magBias[2]);
+    Serial.print("magScale[x] : "); Serial.println(magScale[0]);
+    Serial.print("magScale[y] : "); Serial.println(magScale[1]);
+    Serial.print("magScale[z] : "); Serial.println(magScale[2]);
+
     delay(1000);
   }
 }
+void Mpu9250::magRecalibrate(){
+  magcalMPU9250(magBias, magScale);
 
+  Serial.println("AK8963");
+  Serial.println("ASAX ");
+  Serial.println(magCalibration[0], 2);
+  Serial.println("ASAY ");
+  Serial.println(magCalibration[1], 2);
+  Serial.println("ASAZ ");
+  Serial.println(magCalibration[2], 2);
+
+  Serial.print("magBias[x] : "); Serial.println(magBias[0]);
+  Serial.print("magBias[y] : "); Serial.println(magBias[1]);
+  Serial.print("magBias[z] : "); Serial.println(magBias[2]);
+  Serial.print("magScale[x] : "); Serial.println(magScale[0]);
+  Serial.print("magScale[y] : "); Serial.println(magScale[1]);
+  Serial.print("magScale[z] : "); Serial.println(magScale[2]);
+
+  delay(1000);
+}
+void    Mpu9250::magCalibRaz(){
+   // Valeurs pour annuler le calibrage 
+    magBias[0] = 0.0;
+    magBias[1] = 0.0;
+    magBias[2] = 0.0;
+    magScale[0] = 1.0;
+    magScale[1] = 1.0;
+    magScale[2] = 1.0;
+}
 
 void Mpu9250::magcalMPU9250(float * dest1, float * dest2)
 {

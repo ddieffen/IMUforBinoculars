@@ -89,6 +89,12 @@ void Astro::Communication() {
     if (input[1] == 'N' && input[2] == 'O' && input[3] == 'D' && input[4] == '#') {
       SerialDebug = false;
     }
+    if (input[1] == 'M' && input[2] == 'C' && input[3] == 'A' && input[4] == '#') {
+      MagCalibrate = true;
+    }
+    if (input[1] == 'M' && input[2] == 'C' && input[3] == '0' && input[4] == '#') {
+      MagCalibRaz = true;
+    }
   }
 }
 

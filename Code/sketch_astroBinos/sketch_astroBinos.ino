@@ -22,6 +22,8 @@ long magdec = -3;
 
 //if set to true, lots of debugging information will be available on the serial port
 bool SerialDebug = true;
+bool MagCalibrate = false; // demande de recalibration
+bool MagCalibRaz = false; // Demande de remise à 0 de la calibration
 
 float accelCount[3];
 float gyroCount[3];
