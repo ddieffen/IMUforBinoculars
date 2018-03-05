@@ -327,10 +327,11 @@ void Mpu9250::readMagData(int16_t * destination)
 void Mpu9250::readMagData(float * destination)
 {
   int16_t magCount[3];
+  float mRes = Mpu9250::getMres();
   readMagData(magCount);
-  destination[0] = ((float)magCount[0] - magBias[0]) * magScale[0] ;  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = ((float)magCount[1] - magBias[1]) * magScale[1] ;
-  destination[2] = ((float)magCount[2] - magBias[2]) * magScale[2] ;
+  destination[0] = ((float)magCount[0] * mRes - magBias[0]) * magScale[0] ;  // Turn the MSB and LSB into a signed 16-bit value
+  destination[1] = ((float)magCount[1] * mRes - magBias[1]) * magScale[1] ;
+  destination[2] = ((float)magCount[2] * mRes - magBias[2]) * magScale[2] ;
 
 }
 
