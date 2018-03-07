@@ -326,12 +326,12 @@ void Mpu9250::readMagData(int16_t * destination)
 
 void Mpu9250::readMagData(float * destination)
 {
-  int16_t magCount[3];
+  //int16_t magCount[3];
   float mRes = Mpu9250::getMres();
-  readMagData(magCount);
-  destination[0] = ((float)magCount[0] * mRes - magBias[0]) * magScale[0] ;  // Turn the MSB and LSB into a signed 16-bit value
-  destination[1] = ((float)magCount[1] * mRes - magBias[1]) * magScale[1] ;
-  destination[2] = ((float)magCount[2] * mRes - magBias[2]) * magScale[2] ;
+  readMagData(magData);
+  destination[0] = ((float)magData[0] * mRes * magScale[0] - magBias[0])  ;  // Turn the MSB and LSB into a signed 16-bit value
+  destination[1] = ((float)magData[1] * mRes * magScale[1] - magBias[1])  ;
+  destination[2] = ((float)magData[2] * mRes * magScale[2] - magBias[2]) ;
 
 }
 
@@ -486,13 +486,14 @@ void Mpu9250::magRecalibrate(){
   delay(1000);
 }
 void    Mpu9250::magCalibRaz(){
-   // Valeurs pour annuler le calibrage 
-    magBias[0] = 0.0;
-    magBias[1] = 0.0;
-    magBias[2] = 0.0;
-    magScale[0] = 1.0;
-    magScale[1] = 1.0;
-    magScale[2] = 1.0;
+  // Valeurs pour annuler le calibrage 
+  magBias[0] = 0.0;
+  magBias[1] = 0.0;
+  magBias[2] = 0.0;
+  magScale[0] = magCalibration[0];
+  magScale[1] = magCalibration[1];
+  magScale[2] = magCalibration[2];
+  Serial.println("Mag Calibration: Raz done!");
 }
 
 void Mpu9250::magcalMPU9250(float * dest1, float * dest2)

@@ -17,8 +17,8 @@ void setup() {
   setSyncProvider(getTeensy3Time);
   Serial.println("Current RTC date:");
   serialPrintRTCdateTime();
-  latN = l_EEPROM2Lat();
-  lonE = l_EEPROM2Lon();
+  latN = (double)l_EEPROM2Lat() / 1000000;
+  lonE = (double)l_EEPROM2Lon() / 1000000;
   Serial.println("Current EEPROM position:");
   Serial.println("Lat: " + String(latN) + " Lon: " + String(lonE));
   bool localize = false;
